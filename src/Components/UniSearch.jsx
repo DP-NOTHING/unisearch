@@ -6,8 +6,8 @@ const UniSearch = () => {
   const [country, setCountry] = useState("");
   const [universities, setUniversities] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [provinces, setProvinces] = useState([]);
-  const [selectedProvince, setSelectedProvince] = useState("");
+  const [state, setState] = useState([]);
+  const [selectedState, setSelectedState] = useState("");
   const cardRefs = useRef({});
 
   useEffect(() => {
@@ -24,20 +24,20 @@ const UniSearch = () => {
       );
       const data = await response.json();
       setUniversities(data);
-      const allProvinces = data.map((uni) => uni["state-province"]);
+      const allstate = data.map((uni) => uni["state-province"]);
 
-      let uniqueProvinces = [];
+      let uniquestate = [];
 
-      for (let province of allProvinces) {
-        if (province && !uniqueProvinces.includes(province)) {
-          uniqueProvinces.push(province);
+      for (let province of allstate) {
+        if (province && !uniquestate.includes(province)) {
+          uniquestate.push(province);
         }
       }
 
-      uniqueProvinces.unshift("All");
+      uniquestate.unshift("All");
 
-      setProvinces(uniqueProvinces);
-      setSelectedProvince("All");
+      setState(uniquestate);
+      setSelectedState("All");
     } catch (error) {
       console.error("Error fetching universities:", error);
     } finally {
@@ -47,7 +47,7 @@ const UniSearch = () => {
 
   const filteredUniversities = universities.filter(
     (uni) =>
-      selectedProvince === "All" || uni["state-province"] === selectedProvince
+      selectedState === "All" || uni["state-province"] === selectedState
   );
 
   const downloadCard = async (index) => {
@@ -78,14 +78,14 @@ const UniSearch = () => {
           </button>
         </div>
 
-        {/* {provinces.length > 0 && ( */}
+        {/* {state.length > 0 && ( */}
         <div className="dropdown-container">
           <select
-            value={selectedProvince}
-            onChange={(e) => setSelectedProvince(e.target.value)}
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
             className="province-dropdown"
           >
-            {provinces.map((province) => (
+            {state.map((province) => (
               <option key={province} value={province}>
                 {province || "State"}
               </option>
